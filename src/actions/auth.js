@@ -11,9 +11,7 @@ export const logIn = (loginData) => handleError(async (dispatch, getState, { api
 
 
 export const logOut = () => handleError(async (dispatch, getState, { api }) => {
-
-  await utils.delay(1000); //api.logOut();
-
+  api.logOut();
   return true;
 }, 'Ha ocurrido un error al cerrar sesión');
 

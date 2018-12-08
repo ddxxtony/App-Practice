@@ -10,6 +10,7 @@ import { createSelector } from 'reselect';
 
 import { utils } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
+import { logOut } from 'avenaChallenge/src/actions/auth';
 import { loadNextPage, makeSearch, loadNextPageFromSearch } from 'avenaChallenge/src/actions/initializers';
 import { EmptyMessage } from './emptyMessage';
 
@@ -44,7 +45,7 @@ const makeMapStateToProps = () => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart, loadNextPage, makeSearch, loadNextPageFromSearch }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart, loadNextPage, makeSearch, loadNextPageFromSearch, logOut }, dispatch);
 
 class _Ingredient extends PureComponent {
 
@@ -87,7 +88,8 @@ class _IngredientsList extends PureComponent {
     cartItems: PropTypes.object,
     loadNextPage: PropTypes.func.isRequired,
     makeSearch: PropTypes.func.isRequired,
-    loadNextPageFromSearch: PropTypes.func.isRequired
+    loadNextPageFromSearch: PropTypes.func.isRequired,
+    logOut: PropTypes.func.isRequired
 
   }
 
@@ -125,7 +127,7 @@ class _IngredientsList extends PureComponent {
 
   render() {
 
-    const { refreshing, ingredients, urlParams, cartItems, loadNextPage, showSearchBar } = this.props;
+    const { refreshing, ingredients, urlParams, cartItems, loadNextPage, showSearchBar, logOut } = this.props;
     const { search } = urlParams;
 
     return (
@@ -133,9 +135,12 @@ class _IngredientsList extends PureComponent {
         <View cls='bg-white flx-row mh3 aic h3' >
           {showSearchBar ?
             <TextInput cls='ba b--gray mv2 br3 f4 tc black flx-i ' style={styles.searchBar} placeholderTextColor='gray' underlineColorAndroid='transparent' placeholder='Buscar' onChangeText={this.onSearchChange} value={search} />
-            : <TouchableOpacity cls='flx-i'>
-              <Image cls='rm-contain' style={styles.logo} source={require('avenaChallenge/assets/dig.png')} />
-            </TouchableOpacity>}
+            : <View cls='flx-i flx-row aic'>
+              <TouchableOpacity onPress={logOut}>
+                <Image cls='rm-contain' style={styles.logOut} source={require('avenaChallenge/assets/logOut.png')} />
+              </TouchableOpacity>
+            </View>
+          }
           {showSearchBar ?
             <TouchableOpacity onPress={this.onSearchCancelled} cls='ml3' >
               <Image cls='rm-contain' style={styles.searchImage} source={require('avenaChallenge/assets/cross.png')} />
@@ -181,6 +186,10 @@ const styles = StyleSheet.create({
     }),
   },
   searchImage: {
+    height: 25,
+    width: 25
+  },
+  logOut:{
     height: 25,
     width: 25
   },

@@ -11,7 +11,7 @@ class _EmptyMessage extends PureComponent {
     static propTypes = {
         message: PropTypes.string.isRequired
     }
-
+    
     render() {
         const { message } = this.props;
         return (

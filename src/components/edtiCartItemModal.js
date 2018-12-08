@@ -65,6 +65,7 @@ class _EdtiCartItemModal extends PureComponent {
                                     <>
                                         <View>
                                             <TextInput
+                                                keyboardType='numeric'
                                                 cls='bb b--lightgray f5 tc black pv3'
                                                 value={amount.value ? amount.value + '' : amount.value}
                                                 onChangeText={amount.onChange}

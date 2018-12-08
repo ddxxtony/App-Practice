@@ -19,7 +19,7 @@ const loginSchema = {
   psw: Joi.string().required().max(30).label('La contraseña').required()
 };
 
-const Input = NativeTachyons.wrap(({ placeholder, value, onChange, errored, message, extraProps = {} }) => {
+const Input = NativeTachyons.wrap(({ placeholder, value, onChange, errored, message, ...extraProps }) => {
 
   return (
     <View>
@@ -48,8 +48,8 @@ class _LoginForm extends PureComponent {
             <Fieldset onSubmit={logIn} schema={loginSchema} source={loginTemplate} cls='ass' >
               {({ email, psw }, { loading, submitForm }) => (
                 <>
-                  <Input placeholder='Correo' {...email} />
-                  <Input placeholder='Contraseña' extraProps={{ secureTextEntry: true }} {...psw} />
+                  <Input placeholder='Correo' {...email} autoCapitalize='none' keyboardType='email-address'/>
+                  <Input placeholder='Contraseña'  secureTextEntry={true}  {...psw} autoCapitalize='none' />
                   <Button cls='ma4' onPress={submitForm} loading={loading}   >Iniciar Sesión</Button>
                 </>
               )}

@@ -1,6 +1,6 @@
 import { AsyncStorage } from 'react-native';
 import base64 from 'react-native-base64'
-import  _ from 'lodash';
+import _ from 'lodash';
 
 import { apiUrl } from 'avenaChallenge/app.json';
 import { CartManager } from './cart';
@@ -15,12 +15,12 @@ function objToQueryString(obj) {
   return keyValuePairs.join('&');
 }
 
-const makeApiCall = async ({ code, method = 'GET', params='' }) => {
+const makeApiCall = async ({ code, method = 'GET', params = '' }) => {
 
   var headers = new Headers();
   headers.append('Authorization', 'Basic ' + code);
   const result = await fetch(
-   `${apiUrl}?${params}`,
+    `${apiUrl}?${params}`,
     {
       method,
       headers: headers
@@ -65,44 +65,39 @@ export class Api {
 
     const code = base64.encode(`${email}:${psw}`);
 
-    const result = await makeApiCall({ code, params: objToQueryString({ limit: 1 })  });
+    const result = await makeApiCall({ code, params: objToQueryString({ limit: 1 }) });
     if (!result.ok) throw new Error('Datos de acceso incorrectos')
 
-    loginData = { ...loginData, code};
+    loginData = { ...loginData, code };
     saveUserToStorage(loginData);
-    this.store.dispatch({ type: 'SET_USER', user:loginData });
+    this.store.dispatch({ type: 'SET_USER', user: loginData });
 
     return true;
   }
 
-  logOut(loginData) {
-
-    const { email, psw } = loginData;
-
-    if (email !== 'test@test.test' || psw !== 'test') throw new Error('Datos de acceso incorrectos')
-
-    saveUserToStorage(loginData);
-    this.store.dispatch({ type: 'SET_USER', user: loginData });
+  logOut() {
+    saveUserToStorage(null);
+    this.store.dispatch({ type: 'SET_USER', user: null });
     return true;
   }
 
   getIngredients = async (nextPageToken) => {
 
     const { user } = this.store.getState();
-    const { response } = await makeApiCall({ code: user.code, params: objToQueryString({ limit: 30, nextPageToken}) })
+    const { response } = await makeApiCall({ code: user.code, params: objToQueryString({ limit: 30, nextPageToken }) })
 
-    this.store.dispatch({ type: `Ingredient_${nextPageToken?'ADDED':'FETCHED'}`, objects: response.items })
-    this.store.dispatch({type: 'LastIngredientsToken_FETCHED', token: response.nextPageToken })
+    this.store.dispatch({ type: `Ingredient_${nextPageToken ? 'ADDED' : 'FETCHED'}`, objects: response.items })
+    this.store.dispatch({ type: 'LastIngredientsToken_FETCHED', token: response.nextPageToken })
     return response.items;
   }
 
   getSearchedIngredients = async (nextPageToken, search) => {
 
     const { user } = this.store.getState();
-    const { response={} } =search? await makeApiCall({ code: user.code, params: objToQueryString({ limit: 30, nextPageToken, search}) }):{}
+    const { response = {} } = search ? await makeApiCall({ code: user.code, params: objToQueryString({ limit: 30, nextPageToken, search }) }) : {}
 
-    this.store.dispatch({ type: `IngredientSearch_${nextPageToken && search?'ADDED':'FETCHED'}`, objects: response.items || [] })
-    this.store.dispatch({type: 'LastIngredientsSearchToken_FETCHED', token: response.nextPageToken })
+    this.store.dispatch({ type: `IngredientSearch_${nextPageToken && search ? 'ADDED' : 'FETCHED'}`, objects: response.items || [] })
+    this.store.dispatch({ type: 'LastIngredientsSearchToken_FETCHED', token: response.nextPageToken })
     return response.items;
   }
 }

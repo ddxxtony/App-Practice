@@ -103,7 +103,7 @@ class _CartDetails extends PureComponent {
                 />
                 <View cls='bg-white flx-row mh3 aic h3' >
                     <TouchableOpacity cls='flx-i' onPress={this.props.history.goBack}>
-                        <Image cls='rm-contain' style={styles.logo} source={require('avenaChallenge/assets/dig.png')} />
+                        <Image cls='rm-contain' style={styles.back} source={require('avenaChallenge/assets/back.png')} />
                     </TouchableOpacity>
                     <View cls='ml3 flx-row aic' >
                         <Image cls='rm-contain' style={styles.icon} source={require('avenaChallenge/assets/cart.png')} />
@@ -142,9 +142,9 @@ const styles = StyleSheet.create({
         height: 25,
         width: 25
     },
-    logo: {
-        height: 35,
-        width: 55
+    back: {
+        height: 25,
+        width: 25
     }
 }
 );
