@@ -1,4 +1,5 @@
 {
   "name": "avenaChallenge",
-  "displayName": "Avena Challenge"
+  "displayName": "Avena Challenge",
+  "apiUrl": "https://avena-dev.appspot.com/_ah/api/food/v1/food/smae"
 }

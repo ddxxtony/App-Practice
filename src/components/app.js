@@ -6,11 +6,14 @@ import { Route, Switch } from 'react-router-native';
 import NativeTachyons from 'react-native-style-tachyons';
 
 import { LoginForm } from './loginForm';
+import { IngredientsList } from './ingredientsList';
+import { CartDetails } from './cartDetails';
 
 
 const mapStateToProps = (state) => ({
   initializing: state.appInfo.initializing,
   refreshing: state.appInfo.refreshing,
+  user: state.user,
 });
 
 
@@ -19,15 +22,19 @@ export class _App extends PureComponent {
   static propTypes = {
     initializing: PropTypes.bool.isRequired,
     refreshing: PropTypes.bool.isRequired,
+    user: PropTypes.object
   }
 
 
   render() {
+    const { user } = this.props;
     return (
       <View cls='flx-i bg-white'>
         <StatusBar backgroundColor='black' barStyle='light-content' />
         <Switch>
-           <Route  component={LoginForm} />
+          {!user && <Route  component={LoginForm} />}
+           <Route exact path='/'  component={IngredientsList} />
+           <Route exact path='/cart-details'  component={CartDetails} />
         </Switch>
       </View>
     );
