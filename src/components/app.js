@@ -33,7 +33,7 @@ export class _App extends PureComponent {
         <StatusBar backgroundColor='black' barStyle='light-content' />
         <Switch>
           {!user && <Route  component={LoginForm} />}
-           <Route exact path='/'  component={IngredientsList} />
+           <Route exact path='/:action(search)?'  component={IngredientsList} />
            <Route exact path='/cart-details'  component={CartDetails} />
         </Switch>
       </View>

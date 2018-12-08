@@ -9,9 +9,15 @@ const ingredients=  combineReducers({
   lastToken: (state = null, action) => action.type === 'LastIngredientsToken_FETCHED' ? (action.token || null) : state,
 });
 
+const ingredientsSearch =  combineReducers({
+  list: createCRUDArrayReducer('IngredientSearch', 'websafeKey'),
+  lastToken: (state = null, action) => action.type === 'LastIngredientsSearchToken_FETCHED' ? (action.token || null) : state,
+});
+
 
 const objectsReducer = combineReducers({
   ingredients,
+  ingredientsSearch,
   cartItems: createCRUDObjectReducer('CartItem', 'websafeKey'),
 });
 

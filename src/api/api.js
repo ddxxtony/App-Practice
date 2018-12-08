@@ -91,9 +91,18 @@ export class Api {
     const { user } = this.store.getState();
     const { response } = await makeApiCall({ code: user.code, params: objToQueryString({ limit: 30, nextPageToken}) })
 
-
     this.store.dispatch({ type: `Ingredient_${nextPageToken?'ADDED':'FETCHED'}`, objects: response.items })
     this.store.dispatch({type: 'LastIngredientsToken_FETCHED', token: response.nextPageToken })
+    return response.items;
+  }
+
+  getSearchedIngredients = async (nextPageToken, search) => {
+
+    const { user } = this.store.getState();
+    const { response={} } =search? await makeApiCall({ code: user.code, params: objToQueryString({ limit: 30, nextPageToken, search}) }):{}
+
+    this.store.dispatch({ type: `IngredientSearch_${nextPageToken && search?'ADDED':'FETCHED'}`, objects: response.items || [] })
+    this.store.dispatch({type: 'LastIngredientsSearchToken_FETCHED', token: response.nextPageToken })
     return response.items;
   }
 }

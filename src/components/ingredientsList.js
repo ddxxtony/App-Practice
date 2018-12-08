@@ -10,7 +10,7 @@ import { createSelector } from 'reselect';
 
 import { utils, FlatList } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
-import { loadNextPage } from 'avenaChallenge/src/actions/initializers';
+import { loadNextPage, makeSearch, loadNextPageFromSearch } from 'avenaChallenge/src/actions/initializers';
 
 
 
@@ -19,23 +19,31 @@ const makeMapStateToProps = () => {
   const getIngredients = createSelector(
     (state) => state.objects.ingredients.list,
     getUrlParams,
+    (ingredients, urlParams) => _.filter(ingredients)
+  );
+
+  const getIngredientsSearchResult  = createSelector(
+    (state) => state.objects.ingredientsSearch.list,
+    getUrlParams,
     (ingredients, urlParams) =>
-      _(utils.filterObjects(ingredients, { filter: urlParams.search, columns: ['name', 'price'] }))
+      _(utils.filterObjects(ingredients, { filter: urlParams.search, columns: ['name'] }))
       .filter('reviewed')
         .value()
   );
 
   return (state, props) => {
+    const showSearchBar= props.match.params.action === 'search';
     return {
       refreshing: state.appInfo.refreshing || state.appInfo.initializing,
-      ingredients: getIngredients(state, props),
+      ingredients: showSearchBar? getIngredientsSearchResult(state, props) : getIngredients(state, props),
       urlParams: getUrlParams(state, props),
-      cartItems: state.objects.cartItems
+      cartItems: state.objects.cartItems,
+      showSearchBar 
     };
   };
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart, loadNextPage }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart, loadNextPage, makeSearch, loadNextPageFromSearch }, dispatch);
 
 class _Ingredient extends PureComponent {
 
@@ -76,12 +84,14 @@ class _IngredientsList extends PureComponent {
     urlParams: PropTypes.object.isRequired,
     addItemToCart: PropTypes.func.isRequired,
     cartItems: PropTypes.object,
-    loadNextPage: PropTypes.func.isRequired
+    loadNextPage: PropTypes.func.isRequired,
+    makeSearch: PropTypes.func.isRequired,
+    loadNextPageFromSearch: PropTypes.func.isRequired
+
   }
 
   state = {
     loading: false,
-    showSearchBar: false,
   }
 
   onTap = async (item) => {
@@ -90,24 +100,32 @@ class _IngredientsList extends PureComponent {
     this.setState({ loading: false });
   }
 
-  toggleSearchBar = () => {
-    const { showSearchBar } = this.state;
-    if (showSearchBar)
-      this.onSearchChange(undefined);
-    this.setState({
-      showSearchBar: !showSearchBar
-    })
+  makeSearch = _.debounce(this.props.makeSearch, 500);
+
+  componentDidUpdate({ urlParams: oldUrlParams }) {
+    const { search } = this.props.urlParams;
+    if (oldUrlParams.search !== search) {
+      this.makeSearch(search);
+    }
   }
 
+  onEnReachedWithSearch = () => {
+      const { urlParams, loadNextPageFromSearch } = this.props;
+      loadNextPageFromSearch(urlParams.search);
+  }
+
+  onSearchCancelled = () => {
+    this.onSearchChange(undefined);
+    this.props.history.replace('/')
+  }
 
   ingredientRenderer = ({ item: ingredient }) => <Ingredient key={ingredient.websafeKey} loading={this.state.loading} ingredient={ingredient} onTap={this.onTap.bind(null, ingredient)} />
   onSearchChange = utils.createQueryStringHandler(this, 'search');
 
   render() {
 
-    const { refreshing, ingredients, urlParams, cartItems, loadNextPage } = this.props;
+    const { refreshing, ingredients, urlParams, cartItems, loadNextPage, showSearchBar } = this.props;
     const { search } = urlParams;
-    const { showSearchBar } = this.state;
 
     return (
       <View cls='flx-i'>
@@ -118,12 +136,12 @@ class _IngredientsList extends PureComponent {
               <Image cls='rm-contain' style={styles.logo} source={require('avenaChallenge/assets/dig.png')} />
             </TouchableOpacity>}
           {showSearchBar ?
-            <TouchableOpacity cls='ml3' onPress={this.toggleSearchBar} >
+            <TouchableOpacity onPress={this.onSearchCancelled} cls='ml3' >
               <Image cls='rm-contain' style={styles.searchImage} source={require('avenaChallenge/assets/cross.png')} />
             </TouchableOpacity>
-            : <TouchableOpacity cls='ml3' onPress={this.toggleSearchBar} >
+            : <Link component={TouchableOpacity} to='/search' cls='ml3' onPress={this.toggleSearchBar} >
               <Image cls='rm-contain' style={styles.searchImage} source={require('avenaChallenge/assets/search.png')} />
-            </TouchableOpacity>}
+            </Link>}
           < Link component={TouchableOpacity} to='/cart-details' cls='ml3 flx-row aic' >
             <Image cls='rm-contain' style={styles.searchImage} source={require('avenaChallenge/assets/cart.png')} />
             <Text cls='ml2 red'>{_.sumBy(_.toArray(cartItems), 'amount')}</Text>
@@ -136,7 +154,7 @@ class _IngredientsList extends PureComponent {
           keyExtractor={({ websafeKey }) => websafeKey}
           removeClippedSubviews={true}
           renderItem={this.ingredientRenderer}
-          onEndReached={loadNextPage}
+          onEndReached={showSearchBar?this.onEnReachedWithSearch:loadNextPage}
         />
       </View>
     );

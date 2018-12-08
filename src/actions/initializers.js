@@ -26,6 +26,30 @@ export const loadNextPage = () => handleError(async (dispatch, getState, { api }
   }
 }, 'No se pudieron descargar los datos del servidor');
 
+
+ 
+export const makeSearch = (search) => handleError(async (dispatch, getState, { api }) => {
+  dispatch({ type: 'SET_REFRESHING', refreshing: true });
+  try {
+    await api.getSearchedIngredients(undefined, search);
+    return true;
+  } finally {
+    dispatch({ type: 'SET_REFRESHING', refreshing: false });
+  }
+}, 'Ha ocurrido un error al intentar realizar la búsqueda');
+
+export const loadNextPageFromSearch = (search) => handleError(async (dispatch, getState, { api }) => {
+  dispatch({ type: 'SET_REFRESHING', refreshing: true });
+  try {
+    const { lastToken } = getState().objects.ingredients;
+    await api.getSearchedIngredients(lastToken, search);
+    return true;
+  } finally {
+    dispatch({ type: 'SET_REFRESHING', refreshing: false });
+  }
+}, 'No se pudieron descargar los datos del servidor');
+
+
 export const loadFromServer = () => handleError(async (dispatch, getState, { api }) => {
   dispatch({ type: 'SET_REFRESHING', refreshing: true });
   try {

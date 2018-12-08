@@ -93,6 +93,7 @@ class _CartDetails extends PureComponent {
         const { refreshing, cartItems } = this.props;
         const cartItemsArray = _.toArray(cartItems);
         const { showModal, cartItem } = this.state;
+        const totalTopay = _.sumBy(cartItemsArray, ({ amount, price }) => amount * (Number(price) || 0));
         return (
             <View cls='flx-i'>
                 <EdtiCartItemModal
@@ -115,7 +116,7 @@ class _CartDetails extends PureComponent {
                     data={cartItemsArray}
                     keyExtractor={({ websafeKey }) => websafeKey}
                     renderItem={this.cartItemRenderer}
-                    ListFooterComponent={() => cartItemsArray.length ? <Footer total={_.sumBy(cartItemsArray, ({ amount, price }) => amount * price)} /> : <View />}
+                    ListFooterComponent={() => cartItemsArray.length ? <Footer total={totalTopay} /> : <View />}
                 />
             </View>
         );
