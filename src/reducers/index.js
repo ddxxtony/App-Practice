@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
 
-import { createCRUDObjectReducer, cleanWhenNoUser } from './utils';
+import { createCRUDObjectReducer, cleanWhenNoUser, createCRUDArrayReducer } from './utils';
 import { appInfoReducer } from './appInfo';
 
 
 const ingredients=  combineReducers({
-  list: createCRUDObjectReducer('Ingredient', 'websafeKey'),
+  list: createCRUDArrayReducer('Ingredient', 'websafeKey'),
   lastToken: (state = null, action) => action.type === 'LastIngredientsToken_FETCHED' ? (action.token || null) : state,
 });
 

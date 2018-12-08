@@ -1,15 +1,17 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { View, Text, TouchableOpacity, FlatList, TextInput, RefreshControl, StyleSheet, Platform, Image } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, RefreshControl, StyleSheet, Platform, Image } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import NativeTachyons, { sizes } from 'react-native-style-tachyons';
 import { Link } from 'react-router-native';
 import { createSelector } from 'reselect';
 
-import { utils } from 'avenaChallenge/src/controls';
+import { utils, FlatList } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
+import { loadNextPage } from 'avenaChallenge/src/actions/initializers';
+
 
 
 const makeMapStateToProps = () => {
@@ -33,22 +35,22 @@ const makeMapStateToProps = () => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart, loadNextPage }, dispatch);
 
 class _Ingredient extends PureComponent {
 
   static propTypes = {
     ingredient: PropTypes.object,
     onTap: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired
+    loading: PropTypes.bool.isRequired,
   }
 
   render() {
     const { ingredient, onTap, loading } = this.props;
     const { name, netWeight, energyCal } = ingredient || {};
     return (
-      <TouchableOpacity onPress={onTap} disabled={loading} cls='bg-white bb b--lightgray flx-row aic ph3 pv3'>
-        <View cls='h3 w3 mv1 bg-white aic jcc'  >
+      <TouchableOpacity onPress={onTap} disabled={loading} cls='bg-white bb b--lightgray flx-row aic ph3 pv3 '>
+        <View cls='h3 w3 mv1 bg-white aic jcc ba'  >
           <Image source={require('avenaChallenge/assets/noImage.png')} cls='rm-cover h3 w3' />
         </View>
         <View cls='ml3'>
@@ -73,7 +75,8 @@ class _IngredientsList extends PureComponent {
     ingredients: PropTypes.array,
     urlParams: PropTypes.object.isRequired,
     addItemToCart: PropTypes.func.isRequired,
-    cartItems: PropTypes.object
+    cartItems: PropTypes.object,
+    loadNextPage: PropTypes.func.isRequired
   }
 
   state = {
@@ -96,12 +99,13 @@ class _IngredientsList extends PureComponent {
     })
   }
 
+
   ingredientRenderer = ({ item: ingredient }) => <Ingredient key={ingredient.websafeKey} loading={this.state.loading} ingredient={ingredient} onTap={this.onTap.bind(null, ingredient)} />
   onSearchChange = utils.createQueryStringHandler(this, 'search');
 
   render() {
 
-    const { refreshing, ingredients, urlParams, cartItems } = this.props;
+    const { refreshing, ingredients, urlParams, cartItems, loadNextPage } = this.props;
     const { search } = urlParams;
     const { showSearchBar } = this.state;
 
@@ -130,7 +134,9 @@ class _IngredientsList extends PureComponent {
           refreshControl={<RefreshControl refreshing={refreshing} color='blue' />}
           data={ingredients}
           keyExtractor={({ websafeKey }) => websafeKey}
+          removeClippedSubviews={true}
           renderItem={this.ingredientRenderer}
+          onEndReached={loadNextPage}
         />
       </View>
     );

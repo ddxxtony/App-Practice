@@ -9,10 +9,21 @@ export const createCRUDObjectReducer = (prefix, key = 'id') => (state = {}, acti
       return { ...state, ..._.keyBy(action.objects, key) };
     case `${prefix}_REMOVED`:
       return _(action.objects).map(key).reduce((acc, cur) => (delete acc[cur], acc), { ...state });
-    case 'REMOVE_OLD_OBJECTS':
-      return _.pickBy(state, (obj) => _.isUndefined(obj.downloadedAt) || obj.downloadedAt > action.timestamp);
     default: return state;
   }
+};
+
+export const createCRUDArrayReducer = (prefix) => {
+  if (_.isString(prefix)) prefix = [prefix];
+  const fetched = new Set(_.map(prefix, (p) => `${p}_FETCHED`));
+  const added = new Set(_.map(prefix, (p) => `${p}_ADDED`));
+  return (state = [], action) => {
+    if (fetched.has(action.type))
+      return action.objects;
+    if (added.has(action.type))
+      return [ ...state, ...action.objects ];
+    return state;
+  };
 };
 
 

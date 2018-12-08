@@ -109,7 +109,6 @@ export class Fieldset extends PureComponent {
     if (error) {
       const errors = _.transform(error.details, (errors, { path: [key], message }) => errors[key] = message, {});
       this.setState({ errors, loading: false });
-      console.log('validation failed', errors);
       return false;
     }
     const success = await onSubmit(source);
