@@ -4,19 +4,30 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "regenerate-icon-ios": "app-icon generate"
   },
   "dependencies": {
     "react": "16.6.1",
-    "react-native": "0.57.7"
+    "react-native": "0.57.7",
+    "prop-types": "^15.6.2",
+    "moment": "^2.22.2",
+    "es6-symbol": "^3.1.1",
+    "history": "^4.7.2",
+    "lodash": "^4.17.11",
+    "react-redux": "^5.1.0",
+    "react-router-native": "^4.3.0",
+    "react-native-keyboard-aware-scroll-view": "^0.7.4",
+    "react-native-style-tachyons": "^4.0.0",
+    "redux": "^4.0.1",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "babel-jest": "23.6.0",
-    "jest": "23.6.0",
+    "app-icon": "^0.6.3",
+    "eslint": "^5.8.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-react": "^7.11.1",
     "metro-react-native-babel-preset": "0.50.0",
-    "react-test-renderer": "16.6.1"
-  },
-  "jest": {
-    "preset": "react-native"
+    "react-test-renderer": "16.6.1",
+    "react-native-ci-tools": "^1.1.0"
   }
 }
