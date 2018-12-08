@@ -9,7 +9,7 @@ import NativeTachyons, { sizes } from 'react-native-style-tachyons';
 import { utils, Button } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
 import { EdtiCartItemModal } from './edtiCartItemModal';
-
+import { EmptyMessage } from './emptyMessage';
 
 const mapStateToProps = (state) => {
     return {
@@ -114,6 +114,7 @@ class _CartDetails extends PureComponent {
                 <FlatList
                     refreshControl={<RefreshControl refreshing={refreshing} color='blue' />}
                     data={cartItemsArray}
+                    ListEmptyComponent={() => <EmptyMessage message='No has agregado ningún articulo a tu carrito' />}
                     keyExtractor={({ websafeKey }) => websafeKey}
                     renderItem={this.cartItemRenderer}
                     ListFooterComponent={() => cartItemsArray.length ? <Footer total={totalTopay} /> : <View />}

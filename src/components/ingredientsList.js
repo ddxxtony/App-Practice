@@ -1,16 +1,17 @@
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-import { View, Text, TouchableOpacity, TextInput, RefreshControl, StyleSheet, Platform, Image } from 'react-native';
+import { View, Text, TouchableOpacity, TextInput, RefreshControl, StyleSheet, Platform, Image, FlatList } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import NativeTachyons, { sizes } from 'react-native-style-tachyons';
 import { Link } from 'react-router-native';
 import { createSelector } from 'reselect';
 
-import { utils, FlatList } from 'avenaChallenge/src/controls';
+import { utils } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
 import { loadNextPage, makeSearch, loadNextPageFromSearch } from 'avenaChallenge/src/actions/initializers';
+import { EmptyMessage } from './emptyMessage';
 
 
 
@@ -22,23 +23,23 @@ const makeMapStateToProps = () => {
     (ingredients, urlParams) => _.filter(ingredients)
   );
 
-  const getIngredientsSearchResult  = createSelector(
+  const getIngredientsSearchResult = createSelector(
     (state) => state.objects.ingredientsSearch.list,
     getUrlParams,
     (ingredients, urlParams) =>
       _(utils.filterObjects(ingredients, { filter: urlParams.search, columns: ['name'] }))
-      .filter('reviewed')
+        .filter('reviewed')
         .value()
   );
 
   return (state, props) => {
-    const showSearchBar= props.match.params.action === 'search';
+    const showSearchBar = props.match.params.action === 'search';
     return {
       refreshing: state.appInfo.refreshing || state.appInfo.initializing,
-      ingredients: showSearchBar? getIngredientsSearchResult(state, props) : getIngredients(state, props),
+      ingredients: showSearchBar ? getIngredientsSearchResult(state, props) : getIngredients(state, props),
       urlParams: getUrlParams(state, props),
       cartItems: state.objects.cartItems,
-      showSearchBar 
+      showSearchBar
     };
   };
 };
@@ -100,7 +101,7 @@ class _IngredientsList extends PureComponent {
     this.setState({ loading: false });
   }
 
-  makeSearch = _.debounce(this.props.makeSearch, 500);
+  makeSearch = _.debounce(this.props.makeSearch, 300);
 
   componentDidUpdate({ urlParams: oldUrlParams }) {
     const { search } = this.props.urlParams;
@@ -110,8 +111,8 @@ class _IngredientsList extends PureComponent {
   }
 
   onEnReachedWithSearch = () => {
-      const { urlParams, loadNextPageFromSearch } = this.props;
-      loadNextPageFromSearch(urlParams.search);
+    const { urlParams, loadNextPageFromSearch } = this.props;
+    loadNextPageFromSearch(urlParams.search);
   }
 
   onSearchCancelled = () => {
@@ -148,14 +149,18 @@ class _IngredientsList extends PureComponent {
           </Link>
         </View>
         <View cls='bg-ora bb  b--lightgray' />
-        <FlatList
-          refreshControl={<RefreshControl refreshing={refreshing} color='blue' />}
-          data={ingredients}
-          keyExtractor={({ websafeKey }) => websafeKey}
-          removeClippedSubviews={true}
-          renderItem={this.ingredientRenderer}
-          onEndReached={showSearchBar?this.onEnReachedWithSearch:loadNextPage}
-        />
+        <View cls='flx-i'>
+          <FlatList
+            refreshControl={<RefreshControl refreshing={refreshing} enabled={false} color='blue' />}
+            data={ingredients}
+            keyExtractor={({ websafeKey }) => websafeKey}
+            removeClippedSubviews={true}
+            renderItem={this.ingredientRenderer}
+            onEndReachedThreshold={0.02}
+            ListEmptyComponent={() => <EmptyMessage message='No hay elementos para mostrar' />}
+            onEndReached={showSearchBar ? this.onEnReachedWithSearch : loadNextPage}
+          />
+        </View>
       </View>
     );
   }

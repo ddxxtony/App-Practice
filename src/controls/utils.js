@@ -56,7 +56,6 @@ export const filterObjects = (objects, { filter, columns }) => {
                 return _.includes(normalizeStr(_.isString(objectKey) ? object[objectKey] : objectKey(object)), filter);
             });
         });
-
     }
 
     return objects.value();
