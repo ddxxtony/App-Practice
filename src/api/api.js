@@ -4,9 +4,10 @@ import _ from 'lodash';
 
 import { apiUrl } from 'avenaChallenge/app.json';
 import { CartManager } from './cart';
+import { PaypalManager } from './paypal';
 
 
-function objToQueryString(obj) {
+objToQueryString = (obj) =>  {
   obj = _.pickBy(obj);
   const keyValuePairs = [];
   for (const key in obj) {
@@ -48,6 +49,7 @@ export class Api {
 
   constructor() {
     this.cart = new CartManager(this);
+    this.paypal= new PaypalManager(this);
     this.store = null;
   }
 

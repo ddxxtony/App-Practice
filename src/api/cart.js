@@ -21,6 +21,12 @@ export class CartManager {
     return cartItems;
   }
 
+  emptyCart = () =>{
+     AsyncStorage.removeItem('cart');
+    this.getStore().dispatch({ type: 'CartItem_FETCHED', objects:[] });
+    return true;
+  }
+
   deleteItemFromCart = async (item) =>{
     const cartItemsJson = await AsyncStorage.getItem('cart') || '{}';
     let cartItems = JSON.parse(cartItemsJson);

@@ -4,10 +4,12 @@ import React, { PureComponent } from 'react';
 import { View, Text, TouchableOpacity, FlatList, RefreshControl, StyleSheet, Platform, Image } from 'react-native';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import queryString from 'query-string';
 import NativeTachyons, { sizes } from 'react-native-style-tachyons';
 
-import { utils, Button } from 'avenaChallenge/src/controls';
+import { utils, Button, Browser } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
+import { getPaymentUrl, confirmPurchase } from 'avenaChallenge/src/actions/payments';
 import { EdtiCartItemModal } from './edtiCartItemModal';
 import { EmptyMessage } from './emptyMessage';
 
@@ -18,22 +20,23 @@ const mapStateToProps = (state) => {
     };
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart, getPaymentUrl, confirmPurchase }, dispatch);
 
 class _Footer extends PureComponent {
     static propTypes = {
-        total: PropTypes.number
+        total: PropTypes.number,
+        onPress: PropTypes.func.isRequired
     }
 
     render() {
-        const { total } = this.props;
+        const { total, onPress } = this.props;
         return (
             <View cls='ph4 pv4'>
                 <View cls='flx-row jcfe'>
                     <Text cls='gray f5 b'>Total a pagar</Text>
                     <Text cls='blue f5 ml3 b'>{utils.formatCurrency(total)}</Text>
                 </View>
-                <Button cls='ma4'>Pagar</Button>
+                <Button cls='ma4' onPress={onPress}>Pagar</Button>
             </View>
         );
     }
@@ -70,13 +73,37 @@ class _CartDetails extends PureComponent {
 
     static propTypes = {
         refreshing: PropTypes.bool.isRequired,
-        cartItems: PropTypes.object
+        cartItems: PropTypes.object,
+        confirmPurchase: PropTypes.func.isRequired
     }
 
     state = {
         loading: false,
-        showModal: false
+        showModal: false,
+        browserVisible: false,
     }
+
+    startPurchase = async () => {
+        const url = await this.props.getPaymentUrl();
+        if (!url) return;
+
+        this.setState({ url, browserVisible: true });
+    }
+
+    hideBrowser = () => {
+        this.setState({ browserVisible: false });
+    }
+
+
+    confirmPurchase = async ({ url }) => {
+        if (_.includes(url, 'cancelled'))
+          this.setState({ browserVisible: false });
+        else if (_.includes(url, 'success')) {
+          const parameters = queryString.parse(url, { arrayFormat: 'index' });
+           this.props.confirmPurchase({ paymentId: parameters['https://success/?paymentId'] });
+          this.setState({ browserVisible: false });
+        }
+      }
 
     hideModal = () => {
         this.setState({ showModal: false, cartItem: undefined });
@@ -91,6 +118,7 @@ class _CartDetails extends PureComponent {
     render() {
 
         const { refreshing, cartItems } = this.props;
+        const { browserVisible, url } =this.state;
         const cartItemsArray = _.toArray(cartItems);
         const { showModal, cartItem } = this.state;
         const totalTopay = _.sumBy(cartItemsArray, ({ amount, price }) => amount * (Number(price) || 0));
@@ -100,6 +128,12 @@ class _CartDetails extends PureComponent {
                     visible={showModal}
                     cartItem={cartItem}
                     onClose={this.hideModal}
+                />
+                <Browser
+                    visible={browserVisible}
+                    url={url}
+                    onClose={this.hideBrowser}
+                    onNavigationChange={this.confirmPurchase}
                 />
                 <View cls='bg-white flx-row mh3 aic h3' >
                     <TouchableOpacity cls='flx-i' onPress={this.props.history.goBack}>
@@ -117,7 +151,7 @@ class _CartDetails extends PureComponent {
                     ListEmptyComponent={() => <EmptyMessage message='No has agregado ningún articulo a tu carrito' />}
                     keyExtractor={({ websafeKey }) => websafeKey}
                     renderItem={this.cartItemRenderer}
-                    ListFooterComponent={() => cartItemsArray.length ? <Footer total={totalTopay} /> : <View />}
+                    ListFooterComponent={() => cartItemsArray.length ? <Footer total={totalTopay} onPress={this.startPurchase} /> : <View />}
                 />
             </View>
         );

@@ -1,5 +1,7 @@
 {
   "name": "avenaChallenge",
   "displayName": "Avena Challenge",
-  "apiUrl": "https://avena-dev.appspot.com/_ah/api/food/v1/food/smae"
+  "apiUrl": "https://avena-dev.appspot.com/_ah/api/food/v1/food/smae",
+  "paypalSecretId": "ENS-9lU2Uag-KxBF6mkSh_DX4MZUWRQQG6bqmVkOtv89P4ncS_FxyAGAmgr7MjnS3ewUYWbAgFJH0bOd",
+  "paypalclientId": "AUEmzKN18EYT1LgJ796lfUQVFPqViePEa9XihSj2l7KNakd1EN9W4SxskS7xm6dLaUkOiVpfXCN6mERI"
 }
