@@ -20,7 +20,7 @@ const makeMapStateToProps = () => {
   const getUrlParams = utils.makeGetUrlParams({ search: '' });
   const getIngredients = createSelector(
     (state) => state.objects.ingredients.list,
-    (ingredients) => _.filter(ingredients)
+    (ingredients) => _.filter(ingredients, 'reviewed')
   );
 
   const getIngredientsSearchResult = createSelector(
