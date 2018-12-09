@@ -14,12 +14,6 @@ const language = {
     required: 'es requerido(a).',
     allowOnly: 'necesita ser uno de los siguientes valores: {{valids}}.',
   },
-  array: {
-    min: 'necesitan ser al menos {{limit}}.',
-    max: 'necesitan ser como máximo {{limit}}.',
-    length: 'necesitan ser {{limit}}.',
-    unique: 'no pueden estar repetidos(as).'
-  },
   string: {
     base: 'debe de ser una cadena válida',
     min: 'necesita tener una longitud mínima de {{limit}} caracteres.',
@@ -29,24 +23,6 @@ const language = {
     alphanum: 'debe contener solamente caracteres alfanuméricos',
     trim: 'no debe tener espacios en blanco iniciales o finales.',
     creditCard: 'debe de ser un número válido',
-    regex: {
-      base: 'necesita ser de al menos 8 caracteres con al menos una letra y un dígito.'
-    },
-    uri: 'necesita ser una dirección válida.',
-  },
-  number: {
-    base: 'necesita ser un número',
-    min: 'necesita ser mayor o igual a {{limit}}',
-    max: 'necesita ser menor o igual a {{limit}}',
-    less: 'necesita ser menor que {{limit}}',
-    greater: 'necesita ser mayor que {{limit}}',
-    float: 'necesita ser un número flotante',
-    integer: 'necesita ser un número entero',
-    precision: 'solo puede contener {{limit}} decimales'
-  },
-  date: {
-    strict: 'necesita ser una fecha valida',
-    max: 'necesita ser menor o igual a "{{limit}}"',
   }
 };
 
