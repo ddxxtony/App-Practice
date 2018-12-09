@@ -20,8 +20,7 @@ const makeMapStateToProps = () => {
   const getUrlParams = utils.makeGetUrlParams({ search: '' });
   const getIngredients = createSelector(
     (state) => state.objects.ingredients.list,
-    getUrlParams,
-    (ingredients, urlParams) => _.filter(ingredients)
+    (ingredients) => _.filter(ingredients)
   );
 
   const getIngredientsSearchResult = createSelector(
@@ -55,7 +54,7 @@ class _Ingredient extends PureComponent {
   }
 
   render() {
-    const { ingredient, onTap, loading } = this.props;
+    const { ingredient, onTap } = this.props;
     const { name, netWeight, energyCal } = ingredient || {};
     return (
       <TouchableOpacity onPress={onTap} cls='bg-white bb b--lightgray flx-row aic ph3 pv3 '>
@@ -188,7 +187,7 @@ const styles = StyleSheet.create({
     height: 25,
     width: 25
   },
-  logOut:{
+  logOut: {
     height: 25,
     width: 25
   },
