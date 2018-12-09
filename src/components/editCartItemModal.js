@@ -32,7 +32,7 @@ class _EdtiCartItemModal extends PureComponent {
 
     onSubmit = async (cartItem) => {
         const { onClose, editItemAmounInCart} =this.props;
-        cartItem.value = Number(cartItem.value);
+        cartItem.amount = Number(cartItem.amount);
         await editItemAmounInCart(cartItem);
         onClose();
     }

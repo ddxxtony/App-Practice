@@ -10,7 +10,7 @@ import NativeTachyons, { sizes } from 'react-native-style-tachyons';
 import { utils, Button, Browser } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
 import { getPaymentUrl, confirmPurchase } from 'avenaChallenge/src/actions/payments';
-import { EdtiCartItemModal } from './edtiCartItemModal';
+import { EdtiCartItemModal } from './editCartItemModal';
 import { EmptyMessage } from './emptyMessage';
 
 const mapStateToProps = (state) => {
