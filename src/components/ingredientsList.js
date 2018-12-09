@@ -52,14 +52,13 @@ class _Ingredient extends PureComponent {
   static propTypes = {
     ingredient: PropTypes.object,
     onTap: PropTypes.func.isRequired,
-    loading: PropTypes.bool.isRequired,
   }
 
   render() {
     const { ingredient, onTap, loading } = this.props;
     const { name, netWeight, energyCal } = ingredient || {};
     return (
-      <TouchableOpacity onPress={onTap} disabled={loading} cls='bg-white bb b--lightgray flx-row aic ph3 pv3 '>
+      <TouchableOpacity onPress={onTap} cls='bg-white bb b--lightgray flx-row aic ph3 pv3 '>
         <View cls='h3 w3 mv1 bg-white aic jcc ba'  >
           <Image source={require('avenaChallenge/assets/noImage.png')} cls='rm-cover h3 w3' />
         </View>
@@ -122,7 +121,7 @@ class _IngredientsList extends PureComponent {
     this.props.history.replace('/')
   }
 
-  ingredientRenderer = ({ item: ingredient }) => <Ingredient key={ingredient.websafeKey} loading={this.state.loading} ingredient={ingredient} onTap={this.onTap.bind(null, ingredient)} />
+  ingredientRenderer = ({ item: ingredient }) => <Ingredient key={ingredient.websafeKey} ingredient={ingredient} onTap={this.onTap.bind(null, ingredient)} />
   onSearchChange = utils.createQueryStringHandler(this, 'search');
 
   render() {
