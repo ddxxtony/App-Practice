@@ -7,7 +7,7 @@ import { CartManager } from './cart';
 import { PaypalManager } from './paypal';
 
 
-objToQueryString = (obj) =>  {
+objToQueryString = (obj) => {
   obj = _.pickBy(obj);
   const keyValuePairs = [];
   for (const key in obj) {
@@ -17,7 +17,6 @@ objToQueryString = (obj) =>  {
 }
 
 const makeApiCall = async ({ code, method = 'GET', params = '' }) => {
-
   var headers = new Headers();
   headers.append('Authorization', 'Basic ' + code);
   const result = await fetch(
@@ -49,7 +48,7 @@ export class Api {
 
   constructor() {
     this.cart = new CartManager(this);
-    this.paypal= new PaypalManager(this);
+    this.paypal = new PaypalManager(this);
     this.store = null;
   }
 

@@ -7,13 +7,12 @@ export const initialize = (store) => handleError(async (dispatch, getState, { ap
   dispatch({ type: 'SET_INITIALIZING', running: true });
   try {
     await api.initialize(store);
-    const success = await dispatch(loadFromServer());
-
+    await dispatch(loadFromServer());
   } finally {
     dispatch({ type: 'SET_INITIALIZING', running: false });
   }
   return true;
-}, 'Ha ocurrido un error al cerrar sesión');
+}, 'Ha ocurrido un error al inicializar la aplicación');
 
 export const loadNextPage = () => handleError(async (dispatch, getState, { api }) => {
   dispatch({ type: 'SET_REFRESHING', refreshing: true });
@@ -27,7 +26,7 @@ export const loadNextPage = () => handleError(async (dispatch, getState, { api }
 }, 'No se pudieron descargar los datos del servidor');
 
 
- 
+
 export const makeSearch = (search) => handleError(async (dispatch, getState, { api }) => {
   dispatch({ type: 'SET_REFRESHING', refreshing: true });
   try {
@@ -37,6 +36,7 @@ export const makeSearch = (search) => handleError(async (dispatch, getState, { a
     dispatch({ type: 'SET_REFRESHING', refreshing: false });
   }
 }, 'Ha ocurrido un error al intentar realizar la búsqueda');
+
 
 export const loadNextPageFromSearch = (search) => handleError(async (dispatch, getState, { api }) => {
   dispatch({ type: 'SET_REFRESHING', refreshing: true });
