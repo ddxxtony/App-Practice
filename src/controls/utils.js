@@ -6,7 +6,6 @@ import _ from 'lodash';
 import { Alert } from 'react-native';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
-
 const queryHandler = function (source) {
     const { component, key, serializer } = this;
     const { history, location } = component.props;
@@ -32,7 +31,6 @@ export const makeGetUrlParams = (defaultParams = {}, deserializers = {}) => crea
         return params;
     }
 );
-
 
 export const showDialog = (title, message = '', buttons, options) => {
     return setTimeout(() => Alert.alert(
@@ -61,7 +59,6 @@ export const filterObjects = (objects, { filter, columns }) => {
     return objects.value();
 };
 
-
 export const formatCurrency = (number) => {
     const numberOfDecimals = 2;
     const decimalSeparator = '.';
@@ -71,10 +68,9 @@ export const formatCurrency = (number) => {
     let j;
     j = (j = i.length) > 3 ? j % 3 : 0;
     return prefix + (j ? i.substr(0, j) + naturalSeparator : '') + i.substr(j).replace(/(\d{3})(?=\d)/g, '$1' + naturalSeparator) + (numberOfDecimals ? decimalSeparator + Math.abs(number - i).toFixed(numberOfDecimals).slice(2) : '');
-  };
+};
 
-
-  export { getStatusBarHeight };
+export { getStatusBarHeight };
 export const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 export const createQueryStringHandler = (component, key, serializer = _.identity) => queryHandler.bind({ component, key, serializer });
 export const joiEmailValidation = Joi.string().regex(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/).max(50).options({ language: { string: { regex: { base: 'no es valido.' } } } });

@@ -12,8 +12,8 @@ export class CartManager {
   addItemToCart = async (item) => {
     const { websafeKey } = item;
     const store = this.getStore();
-    let cartItems = store.getState().objects.cartItems    
-    
+    let cartItems = store.getState().objects.cartItems
+
     const { amount = 0 } = cartItems[websafeKey] || {};
     item = { websafeKey, amount: amount + 1, price: item.netWeight, name: item.name };
     store.dispatch({ type: 'CartItem_ADDED', objects: [item] });
@@ -37,11 +37,11 @@ export class CartManager {
   }
 
   updateCartItemAmount = async (item) => {
-    const store =this.getStore();
+    const store = this.getStore();
     this.getStore().dispatch({ type: 'CartItem_UPDATED', objects: [item] });
     const { cartItems } = store.getState().objects;
     AsyncStorage.setItem('cart', JSON.stringify(cartItems));
-    
+
     return cartItems;
   }
 

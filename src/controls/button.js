@@ -35,7 +35,7 @@ class _Button extends PureComponent {
   }
 
   render() {
-    const { as: component,color,  disabled, loading, activeOpacity, style, children, onPress: ignored, cls: ignored2, ...rest } = this.props;
+    const { as: component, color, disabled, loading, activeOpacity, style, children, onPress: ignored, cls: ignored2, ...rest } = this.props;
     const { awaiting } = this.state;
     const Component = component || TouchableOpacity;
     const isDisabled = loading || disabled || awaiting;
@@ -43,13 +43,13 @@ class _Button extends PureComponent {
     return (
       <Component
         onPress={this.handleOnPress}
-        cls={`bg-orange pv3 br2 ${color?`bg-${color}`:''} `}
+        cls={`bg-orange pv3 br2 ${color ? `bg-${color}` : ''} `}
         activeOpacity={0.7}
         disabled={isDisabled}
         style={[{ opacity: isDisabled ? 0.7 : 1 }, ..._.castArray(style)]}
         {...rest}
       >
-        { loading || awaiting
+        {loading || awaiting
           ? <ActivityIndicator size='small' color='black' />
           : <Text cls='black tc'>{children}</Text>
         }

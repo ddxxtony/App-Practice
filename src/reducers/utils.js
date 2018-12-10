@@ -21,7 +21,7 @@ export const createCRUDArrayReducer = (prefix) => {
     if (fetched.has(action.type))
       return action.objects;
     if (added.has(action.type))
-      return [ ...state, ...action.objects ];
+      return [...state, ...action.objects];
     return state;
   };
 };

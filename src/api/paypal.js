@@ -37,7 +37,7 @@ export class PaypalManager {
         });
         headers.append('Authorization', 'Bearer ' + token);
 
-        const [ ,total] = _.split(formatCurrency(_.sumBy(_.toArray(cartItems), ({ amount, price }) => amount * (Number(price) || 0))), '$')
+        const [, total] = _.split(formatCurrency(_.sumBy(_.toArray(cartItems), ({ amount, price }) => amount * (Number(price) || 0))), '$')
         const innvoiceNumber = _.random(100000, 999999);
 
         let body = {
@@ -92,7 +92,7 @@ export class PaypalManager {
     }
 
 
-    executePayment = async  ({paymentId}) => {
+    executePayment = async ({ paymentId }) => {
         const headers = new Headers({
             'Accept': 'application/json',
             'Content-Type': 'application/json',
@@ -103,8 +103,8 @@ export class PaypalManager {
             headers
         });
 
-        this.token=null;
-       return _.get(await result.json(), 'id');
+        this.token = null;
+        return _.get(await result.json(), 'id');
     }
 
 }

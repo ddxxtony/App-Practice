@@ -97,13 +97,13 @@ class _CartDetails extends PureComponent {
 
     confirmPurchase = async ({ url }) => {
         if (_.includes(url, 'cancelled'))
-          this.setState({ browserVisible: false });
+            this.setState({ browserVisible: false });
         else if (_.includes(url, 'success')) {
-          const parameters = queryString.parse(url, { arrayFormat: 'index' });
-           this.props.confirmPurchase({ paymentId: parameters['https://success/?paymentId'] });
-          this.setState({ browserVisible: false });
+            const parameters = queryString.parse(url, { arrayFormat: 'index' });
+            this.props.confirmPurchase({ paymentId: parameters['https://success/?paymentId'] });
+            this.setState({ browserVisible: false });
         }
-      }
+    }
 
     hideModal = () => {
         this.setState({ showModal: false, cartItem: undefined });
@@ -118,7 +118,7 @@ class _CartDetails extends PureComponent {
     render() {
 
         const { refreshing, cartItems } = this.props;
-        const { browserVisible, url } =this.state;
+        const { browserVisible, url } = this.state;
         const cartItemsArray = _.toArray(cartItems);
         const { showModal, cartItem } = this.state;
         const totalTopay = _.sumBy(cartItemsArray, ({ amount, price }) => amount * (Number(price) || 0));

@@ -70,7 +70,7 @@ export class Fieldset extends PureComponent {
     this.isUnmounted = true;
   }
 
-  submitForm = async() => {
+  submitForm = async () => {
     const { source } = this.state;
     const { schema, onSubmit } = this.props;
 

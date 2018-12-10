@@ -48,8 +48,8 @@ class _LoginForm extends PureComponent {
             <Fieldset onSubmit={logIn} schema={loginSchema} source={loginTemplate} cls='ass' >
               {({ email, psw }, { loading, submitForm }) => (
                 <>
-                  <Input placeholder='Correo' {...email} autoCapitalize='none' keyboardType='email-address'/>
-                  <Input placeholder='Contraseña'  secureTextEntry={true}  {...psw} autoCapitalize='none' />
+                  <Input placeholder='Correo' {...email} autoCapitalize='none' keyboardType='email-address' />
+                  <Input placeholder='Contraseña' secureTextEntry={true}  {...psw} autoCapitalize='none' />
                   <Button cls='ma4' onPress={submitForm} loading={loading}   >Iniciar Sesión</Button>
                 </>
               )}

@@ -32,9 +32,9 @@ export class _App extends PureComponent {
       <View cls='flx-i bg-white'>
         <StatusBar backgroundColor='black' barStyle='light-content' />
         <Switch>
-          {!user && <Route  component={LoginForm} />}
-           <Route exact path='/:action(search)?'  component={IngredientsList} />
-           <Route exact path='/cart-details'  component={CartDetails} />
+          {!user && <Route component={LoginForm} />}
+          <Route exact path='/:action(search)?' component={IngredientsList} />
+          <Route exact path='/cart-details' component={CartDetails} />
         </Switch>
       </View>
     );

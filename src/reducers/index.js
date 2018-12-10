@@ -4,12 +4,12 @@ import { createCRUDObjectReducer, cleanWhenNoUser, createCRUDArrayReducer } from
 import { appInfoReducer } from './appInfo';
 
 
-const ingredients=  combineReducers({
+const ingredients = combineReducers({
   list: createCRUDArrayReducer('Ingredient', 'websafeKey'),
   lastToken: (state = null, action) => action.type === 'LastIngredientsToken_FETCHED' ? (action.token || null) : state,
 });
 
-const ingredientsSearch =  combineReducers({
+const ingredientsSearch = combineReducers({
   list: createCRUDArrayReducer('IngredientSearch', 'websafeKey'),
   lastToken: (state = null, action) => action.type === 'LastIngredientsSearchToken_FETCHED' ? (action.token || null) : state,
 });
@@ -23,9 +23,9 @@ const objectsReducer = combineReducers({
 
 
 
-export const rootReducer= combineReducers({
-  
-  objects: cleanWhenNoUser(objectsReducer), 
+export const rootReducer = combineReducers({
+
+  objects: cleanWhenNoUser(objectsReducer),
   appInfo: appInfoReducer,
   user: (state = null, action) => action.type === 'SET_USER' ? (action.user || null) : state,
 });
