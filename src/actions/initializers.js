@@ -1,5 +1,6 @@
 import { handleError } from './utils';
 import { utils } from 'avenaChallenge/src/controls';
+import { appStart } from './app';
 
 
 export const initialize = (store) => handleError(async (dispatch, getState, { api }) => {
@@ -7,6 +8,8 @@ export const initialize = (store) => handleError(async (dispatch, getState, { ap
   dispatch({ type: 'SET_INITIALIZING', running: true });
   try {
     await api.initialize(store);
+    await dispatch(appStart());
+    
     await dispatch(loadFromServer());
   } finally {
     dispatch({ type: 'SET_INITIALIZING', running: false });
@@ -24,8 +27,6 @@ export const loadNextPage = () => handleError(async (dispatch, getState, { api }
     dispatch({ type: 'SET_REFRESHING', refreshing: false });
   }
 }, 'No se pudieron descargar los datos del servidor');
-
-
 
 export const makeSearch = (search) => handleError(async (dispatch, getState, { api }) => {
   dispatch({ type: 'SET_REFRESHING', refreshing: true });
