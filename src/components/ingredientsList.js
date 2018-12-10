@@ -11,7 +11,7 @@ import { createSelector } from 'reselect';
 import { utils } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
 import { logOut } from 'avenaChallenge/src/actions/auth';
-import { loadNextPage, makeSearch, loadNextPageFromSearch } from 'avenaChallenge/src/actions/initializers';
+import { loadNextPage, makeSearch, loadNextPageFromSearch, loadFromServer } from 'avenaChallenge/src/actions/initializers';
 import { EmptyMessage } from './emptyMessage';
 
 
@@ -44,7 +44,7 @@ const makeMapStateToProps = () => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart, loadNextPage, makeSearch, loadNextPageFromSearch, logOut }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ addItemToCart, loadNextPage, makeSearch, loadNextPageFromSearch, logOut, loadFromServer }, dispatch);
 
 class _Ingredient extends PureComponent {
 
@@ -87,7 +87,8 @@ class _IngredientsList extends PureComponent {
     loadNextPage: PropTypes.func.isRequired,
     makeSearch: PropTypes.func.isRequired,
     loadNextPageFromSearch: PropTypes.func.isRequired,
-    logOut: PropTypes.func.isRequired
+    logOut: PropTypes.func.isRequired,
+    loadFromServer: PropTypes.func.isRequired
 
   }
 
@@ -121,7 +122,7 @@ class _IngredientsList extends PureComponent {
 
   render() {
 
-    const { refreshing, ingredients, urlParams, cartItems, loadNextPage, showSearchBar, logOut } = this.props;
+    const { refreshing, ingredients, loadFromServer,  urlParams, cartItems, loadNextPage, showSearchBar, logOut } = this.props;
     const { search } = urlParams;
 
     return (
@@ -150,7 +151,7 @@ class _IngredientsList extends PureComponent {
         <View cls='bg-ora bb  b--lightgray' />
         <View cls='flx-i'>
           <FlatList
-            refreshControl={<RefreshControl refreshing={refreshing}  enabled={false} color='blue' />}
+            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={loadFromServer}  color='blue' />}
             data={ingredients}
             maxToRenderPerBatch={10}
             updateCellsBatchingPeriod={25}
