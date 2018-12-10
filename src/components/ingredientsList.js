@@ -20,7 +20,10 @@ const makeMapStateToProps = () => {
   const getUrlParams = utils.makeGetUrlParams({ search: '' });
   const getIngredients = createSelector(
     (state) => state.objects.ingredients.list,
-    (ingredients) => _.filter(ingredients, 'reviewed')
+    (ingredients) => {
+      console.log(ingredients)
+     return  _.filter(ingredients, 'reviewed')
+    }
   );
 
   const getIngredientsSearchResult = createSelector(
@@ -95,11 +98,7 @@ class _IngredientsList extends PureComponent {
     loading: false,
   }
 
-  onTap = async (item) => {
-    this.setState({ loading: true });
-    await this.props.addItemToCart(item);
-    this.setState({ loading: false });
-  }
+  onTap = (item) => () => this.props.addItemToCart(item);
 
   makeSearch = _.debounce(this.props.makeSearch, 300);
 
@@ -120,7 +119,17 @@ class _IngredientsList extends PureComponent {
     this.props.history.replace('/')
   }
 
-  ingredientRenderer = ({ item: ingredient }) => <Ingredient key={ingredient.websafeKey} ingredient={ingredient} onTap={this.onTap.bind(null, ingredient)} />
+
+  getItemLayout = (data, index) => {
+    const size = sizes.h3 + sizes.pt3*2;
+     return {
+    length: size,
+    offset: size * index,
+    index
+    };
+}
+
+  ingredientRenderer = ({ item: ingredient }) => <Ingredient ingredient={ingredient} onTap={this.onTap(ingredient)} />
   onSearchChange = utils.createQueryStringHandler(this, 'search');
 
   render() {
@@ -154,12 +163,15 @@ class _IngredientsList extends PureComponent {
         <View cls='bg-ora bb  b--lightgray' />
         <View cls='flx-i'>
           <FlatList
-            refreshControl={<RefreshControl refreshing={refreshing} enabled={false} color='blue' />}
+            refreshControl={<RefreshControl refreshing={refreshing}  enabled={false} color='blue' />}
             data={ingredients}
+            maxToRenderPerBatch={15}
+            getItemLayout={this.getItemLayout}
+            updateCellsBatchingPeriod={25}
+            initialNumToRender={30}
             keyExtractor={({ websafeKey }) => websafeKey}
             removeClippedSubviews={true}
             renderItem={this.ingredientRenderer}
-            onEndReachedThreshold={0.02}
             ListEmptyComponent={() => <EmptyMessage message='No hay elementos para mostrar' />}
             onEndReached={showSearchBar ? this.onEnReachedWithSearch : loadNextPage}
           />

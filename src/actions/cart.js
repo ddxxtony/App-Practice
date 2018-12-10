@@ -1,6 +1,6 @@
 import { handleError } from './utils';
 
-export const addItemToCart = (item) => handleError(async (dispatch, getState) => {
+export const addItemToCart = (item) => handleError((dispatch, getState) => {
   const { websafeKey } = item;
   let { cartItems } = getState().objects;
   const { amount = 0 } = cartItems[websafeKey] || {};
@@ -9,12 +9,12 @@ export const addItemToCart = (item) => handleError(async (dispatch, getState) =>
   return true;
 }, 'Ha ocurrido un error al agregar elemento al carrito');
 
-export const deleteItemFromCart = (cartItem) => handleError(async (dispatch) => {
+export const deleteItemFromCart = (cartItem) => handleError((dispatch) => {
   dispatch({ type: 'CartItem_REMOVED', objects: [cartItem] });
   return true;
 }, 'Ha ocurrido un error al borrar este elemento de su carrito');
 
-export const editItemAmounInCart = (cartItem) => handleError(async (dispatch) => {
+export const editItemAmounInCart = (cartItem) => handleError((dispatch) => {
   dispatch({ type: 'CartItem_UPDATED', objects: [cartItem] });
   return true;
 }, 'Ha ocurrido un error al actualizar su carrito');
