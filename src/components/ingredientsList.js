@@ -20,10 +20,7 @@ const makeMapStateToProps = () => {
   const getUrlParams = utils.makeGetUrlParams({ search: '' });
   const getIngredients = createSelector(
     (state) => state.objects.ingredients.list,
-    (ingredients) => {
-      console.log(ingredients)
-     return  _.filter(ingredients, 'reviewed')
-    }
+    (ingredients) =>   _.filter(ingredients, 'reviewed')
   );
 
   const getIngredientsSearchResult = createSelector(
@@ -119,16 +116,6 @@ class _IngredientsList extends PureComponent {
     this.props.history.replace('/')
   }
 
-
-  getItemLayout = (data, index) => {
-    const size = sizes.h3 + sizes.pt3*2;
-     return {
-    length: size,
-    offset: size * index,
-    index
-    };
-}
-
   ingredientRenderer = ({ item: ingredient }) => <Ingredient ingredient={ingredient} onTap={this.onTap(ingredient)} />
   onSearchChange = utils.createQueryStringHandler(this, 'search');
 
@@ -166,9 +153,8 @@ class _IngredientsList extends PureComponent {
             refreshControl={<RefreshControl refreshing={refreshing}  enabled={false} color='blue' />}
             data={ingredients}
             maxToRenderPerBatch={15}
-            getItemLayout={this.getItemLayout}
             updateCellsBatchingPeriod={25}
-            initialNumToRender={30}
+            initialNumToRender={15}
             keyExtractor={({ websafeKey }) => websafeKey}
             removeClippedSubviews={true}
             renderItem={this.ingredientRenderer}

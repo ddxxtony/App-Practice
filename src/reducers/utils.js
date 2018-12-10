@@ -13,7 +13,7 @@ export const createCRUDObjectReducer = (prefix, key = 'id') => (state = {}, acti
   }
 };
 
-export const createCRUDArrayReducer = (prefix, uniqBy) => {
+export const createCRUDArrayReducer = (prefix) => {
   if (_.isString(prefix)) prefix = [prefix];
   const fetched = new Set(_.map(prefix, (p) => `${p}_FETCHED`));
   const added = new Set(_.map(prefix, (p) => `${p}_ADDED`));
@@ -21,7 +21,7 @@ export const createCRUDArrayReducer = (prefix, uniqBy) => {
     if (fetched.has(action.type))
       return action.objects;
     if (added.has(action.type))
-      return _.uniqBy([...state, ...action.objects], uniqBy);
+      return [...state, ...action.objects];
     return state;
   };
 };

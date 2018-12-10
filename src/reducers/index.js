@@ -5,7 +5,7 @@ import { appInfoReducer } from './appInfo';
 
 
 const ingredients = combineReducers({
-  list: createCRUDArrayReducer('Ingredient', 'websafeKey'),
+  list: createCRUDArrayReducer('Ingredient'),
   lastToken: (state = null, action) => action.type === 'LastIngredientsToken_FETCHED' ? (action.token || null) : state,
 });
 

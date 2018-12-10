@@ -9,7 +9,7 @@ export const initialize = (store) => handleError(async (dispatch, getState, { ap
   try {
     await api.initialize(store);
     await dispatch(appStart());
-    
+
     await dispatch(loadFromServer());
   } finally {
     dispatch({ type: 'SET_INITIALIZING', running: false });
@@ -18,6 +18,7 @@ export const initialize = (store) => handleError(async (dispatch, getState, { ap
 }, 'Ha ocurrido un error al inicializar la aplicación');
 
 export const loadNextPage = () => handleError(async (dispatch, getState, { api }) => {
+  if(getState().appInfo.refreshing) return;
   dispatch({ type: 'SET_REFRESHING', refreshing: true });
   try {
     const { lastToken } = getState().objects.ingredients;
@@ -40,6 +41,7 @@ export const makeSearch = (search) => handleError(async (dispatch, getState, { a
 
 
 export const loadNextPageFromSearch = (search) => handleError(async (dispatch, getState, { api }) => {
+  if(getState().appInfo.refreshing) return;
   dispatch({ type: 'SET_REFRESHING', refreshing: true });
   try {
     const { lastToken } = getState().objects.ingredients;
