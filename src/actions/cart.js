@@ -14,7 +14,7 @@ export const deleteItemFromCart = (cartItem) => handleError((dispatch) => {
   return true;
 }, 'Ha ocurrido un error al borrar este elemento de su carrito');
 
-export const editItemAmounInCart = (cartItem) => handleError((dispatch) => {
+export const editItemAmountInCart = (cartItem) => handleError((dispatch) => {
   dispatch({ type: 'CartItem_UPDATED', objects: [cartItem] });
   return true;
 }, 'Ha ocurrido un error al actualizar su carrito');

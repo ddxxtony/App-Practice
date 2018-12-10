@@ -65,7 +65,7 @@ class _Ingredient extends PureComponent {
           <Text cls='gray f5'>{_.upperFirst(name)}</Text>
           <View cls='flx-row'>
             <Text cls='red'>{utils.formatCurrency(netWeight)}</Text>
-            <Text cls='ml3 lightgray'>calorias: {energyCal}</Text>
+            <Text cls='ml3 lightgray'>calorías: {energyCal}</Text>
           </View>
 
         </View>

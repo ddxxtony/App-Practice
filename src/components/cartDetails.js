@@ -10,7 +10,7 @@ import NativeTachyons, { sizes } from 'react-native-style-tachyons';
 import { utils, Button, Browser } from 'avenaChallenge/src/controls';
 import { addItemToCart } from 'avenaChallenge/src/actions/cart';
 import { getPaymentUrl, confirmPurchase } from 'avenaChallenge/src/actions/payments';
-import { EdtiCartItemModal } from './editCartItemModal';
+import { EditCartItemModal } from './editCartItemModal';
 import { EmptyMessage } from './emptyMessage';
 
 const mapStateToProps = (state) => {
@@ -124,7 +124,7 @@ class _CartDetails extends PureComponent {
         const totalTopay = _.sumBy(cartItemsArray, ({ amount, price }) => amount * (Number(price) || 0));
         return (
             <View cls='flx-i'>
-                <EdtiCartItemModal
+                <EditCartItemModal
                     visible={showModal}
                     cartItem={cartItem}
                     onClose={this.hideModal}

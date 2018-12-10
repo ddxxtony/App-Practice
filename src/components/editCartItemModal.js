@@ -10,30 +10,30 @@ import Joi from 'joi-react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 import { Button, Fieldset, utils } from 'avenaChallenge/src/controls';
-import { deleteItemFromCart, editItemAmounInCart } from 'avenaChallenge/src/actions/cart';
+import { deleteItemFromCart, editItemAmountInCart } from 'avenaChallenge/src/actions/cart';
 
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({ deleteItemFromCart, editItemAmounInCart }, dispatch);
+const mapDispatchToProps = (dispatch) => bindActionCreators({ deleteItemFromCart, editItemAmountInCart }, dispatch);
 
 const schema = {
     amount: Joi.string().trim().required().regex(/^[1-9]\d*$/).options({ language: { string: { regex: { base: 'es inválida' } } } }).label('La cantidad'),
 };
 
 
-class _EdtiCartItemModal extends PureComponent {
+class _EditCartItemModal extends PureComponent {
 
     static propTypes = {
         onClose: PropTypes.func.isRequired,
         visible: PropTypes.bool.isRequired,
         cartItem: PropTypes.object,
-        editItemAmounInCart: PropTypes.func.isRequired,
+        editItemAmountInCart: PropTypes.func.isRequired,
         deleteItemFromCart: PropTypes.func.isRequired
     }
 
     onSubmit = async (cartItem) => {
-        const { onClose, editItemAmounInCart } = this.props;
+        const { onClose, editItemAmountInCart } = this.props;
         cartItem.amount = Number(cartItem.amount);
-        editItemAmounInCart(cartItem);
+        editItemAmountInCart(cartItem);
         onClose();
     }
 
@@ -87,11 +87,10 @@ class _EdtiCartItemModal extends PureComponent {
     }
 }
 
-
 const styles = StyleSheet.create({
     container: {
         height: Dimensions.get('window').height - utils.getStatusBarHeight() - (sizes.pv3 * 2 + sizes.h2)
     },
 });
 
-export const EdtiCartItemModal = connect(undefined, mapDispatchToProps)(NativeTachyons.wrap(_EdtiCartItemModal));
+export const EditCartItemModal = connect(undefined, mapDispatchToProps)(NativeTachyons.wrap(_EditCartItemModal));
