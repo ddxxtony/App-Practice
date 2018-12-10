@@ -152,8 +152,9 @@ class _IngredientsList extends PureComponent {
           <FlatList
             refreshControl={<RefreshControl refreshing={refreshing}  enabled={false} color='blue' />}
             data={ingredients}
-            maxToRenderPerBatch={15}
+            maxToRenderPerBatch={10}
             updateCellsBatchingPeriod={25}
+            windowSize={5}
             initialNumToRender={15}
             keyExtractor={({ websafeKey }) => websafeKey}
             removeClippedSubviews={true}
