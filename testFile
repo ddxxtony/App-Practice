@@ -1,0 +1,10 @@
+async function testing(){
+    const result = await new Promise(function(res, rej){
+        this.x = 'hola';
+        setTimeout(function(){ res(this.x); }, 500); 
+    
+    });
+    console.log(result);
+}
+
+testing();
