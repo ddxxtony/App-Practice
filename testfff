@@ -1,0 +1,35 @@
+// playground requires you to assign document definition to a variable called dd
+
+
+
+writeRotatedText = function(text) {
+  var ctx, canvas = document.createElement('canvas');
+  // I am using predefined dimensions so either make this part of the arguments or change at will 
+  canvas.width = 36;
+  canvas.height = 270;
+  ctx = canvas.getContext('2d');
+  ctx.font = '36pt Arial';
+  ctx.save();
+  ctx.translate(36,270);
+  ctx.rotate(-0.5*Math.PI);
+  ctx.fillStyle = '#000';
+  ctx.fillText(text , 0, 0);
+  ctx.restore();
+  return canvas.toDataURL();
+};
+
+
+
+var dd = {
+	content: [
+		{
+			style: 'tableExample',
+			table: {
+				body: [
+					[{image: writeRotatedText('I am rotated'), fit:[7,53], alignment: 'center'}, 'Heat map here']
+				]
+			}
+		},
+	]
+	
+}
